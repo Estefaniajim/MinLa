@@ -6,43 +6,44 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Graph {
-  /* MinLa: Para sacar el costo entre nodos o el costo total del grafo 
-  se usa la formula: : abs(sourceNode-destinationNode) */
+  /* MinLa: To get the cost between nodes or the total cost of the graph
+   the formula is used:: abs (sourceNode-destinationNode) */
 	private static Scanner input;
 
-	public List<Node> nodesList=new ArrayList<Node>(); //Lista de los nodos en el grafo
-	public List<Integer> numbersAlreadyIn=new ArrayList<Integer>(); // Lista de los valores de los nodos que ya fueron visitados
-	public int 	numberOfNodes, //numeros de los nodos del grafo
-				sumOfNodes,  // Suma del costo total del grafo
-				lastSwapped1, //posiciones de los ultimos nodos que fueron intercambiados
+	public List<Node> nodesList=new ArrayList<Node>(); //List of nodes in the graph
+	public List<Integer> numbersAlreadyIn=new ArrayList<Integer>(); // List of node values that have already been visited
+	public int 	numberOfNodes, //graph node numbers
+				sumOfNodes,  // Sum of the total cost of the graph
+				lastSwapped1, //positions of the last nodes that were exchanged
 				lastSwapped2;
 
-	/*Constructor del grafo
-  Se inicializan los valores de los ultimos nodos swapeados en -1 (posiciones imposibles)*/
+	/*Graph constructor
+   The values of the last swapped nodes are initialized at -1 (impossible positions)*/
 	public Graph() {
 		this.lastSwapped1=-1; 
 		this.lastSwapped2=-1;
 	}
- /*Funcion para crear nodos*/
+ /*Function to create nodes*/
 	public void createNodes() {
-		for (int i=0;i<numberOfNodes;i++) { //Por cada numero de nodos que contiene el grafo
-			Node aNode=new Node(i); //Se crea un nodo
-			nodesList.add(i, aNode);; //se agrega a la lista de nodos
+		for (int i=0;i<numberOfNodes;i++) { //For each number of nodes that the graph contains
+			Node aNode=new Node(i); //A node is created
+			nodesList.add(i, aNode);; //is added to the list of nodes
 		}
 	}
-	/*Funcion para agregar coneciones entre los nodos
-  Input: *int number 1 que es la posicion(empezando de 1 en vez del 0) del nodo source
-         *int number2 que es (empezando de 1 en vez del 0) del nodo destination
+	/*Function to add connections between nodes
+   Input: * int number 1 which is the position (starting from 1 instead of 0) of the source node
+          * int number2 which is (starting from 1 instead of 0) of the destination node
   */
 	public void addConnections(int number1, int number2) {
-		Node a=nodesList.get(number1-1); //se consigue el nodo source
-		Node b=nodesList.get(number2-1); // se consigue el nodo destino
-		a.newNeighbour(b); // se agrega el nodo b en la lista de neigboars en a
-		b.newNeighbour(a); /// y se hace lo mismo para el nodo b
-		sumOfNodes+=Math.abs(number1-number2); //se actualiza el atributo de la suma total del grafo
+		Node a=nodesList.get(number1-1); //source node is achieved
+		Node b=nodesList.get(number2-1); // the destination node is achieved
+		a.newNeighbour(b); // node b is added to the list of neighbors in a
+		b.newNeighbour(a); ///and the same is done for node b
+		sumOfNodes+=Math.abs(number1-number2); //the attribute of the total sum of the graph is updated
+
 	}
   
-  /*Funcion para regresar el grafo en formato string*/
+  /*Function to return the graph in string format*/
 	public String toString() {
 		StringBuilder builder=new StringBuilder();
 		for (Node a: nodesList) {
@@ -52,79 +53,77 @@ public class Graph {
 		return builder.toString();
 	}
 
-	/*Funcion para cambair la posicion de 2 nodos entre ellos
-  Input: Nodos que se quiera hacer el swap  */
+	/*Function to change the position of 2 nodes between them 
+	Input: Nodes that you want to swap  */
 	public void swapNodes(Node A, Node B) {
-		if (!A.equals(B)) { //mientras los nodos sean diferentes
-			for (int i=0;i<numberOfNodes;i++) { //se ente la lista de los nodos
+		if (!A.equals(B)) { //as long as the nodes are different
+			for (int i=0;i<numberOfNodes;i++) { //enter the list of nodes
 				Node currentNode=nodesList.get(i); 
-				if (currentNode.neighbourNodes.contains(A) && currentNode.neighbourNodes.contains(B)) {
-            //mientras el nodo actual tenga como vecino al nodo a y b
-          // help borre algo???
-				}else if(currentNode.neighbourNodes.contains(A)) { //si el nodo a es vecino 
-					currentNode.neighbourNodes.remove(A); // se elimina el nodo a de los vecinos 
-					currentNode.newNeighbour(B); // y se agrega el nodo b de los vecinos 
-				}else if(currentNode.neighbourNodes.contains(B)) { //si es el nodo b el vecino 
-					currentNode.neighbourNodes.remove(B); // se elimina el nodo b de lso vecinos 
-					currentNode.newNeighbour(A); // y se agrega el nodo a como vecinos
+				if(currentNode.neighbourNodes.contains(A)) { //if node a is neighbor
+					currentNode.neighbourNodes.remove(A); // node a is removed from neighbors
+					currentNode.newNeighbour(B); // and the node b of the neighbors is added
+				}else if(currentNode.neighbourNodes.contains(B)) { //if node b is the neighbor
+					currentNode.neighbourNodes.remove(B); // node b is removed from the neighbors
+					currentNode.newNeighbour(A); // and add the node a as neighbors
 				}
 			}
-			List<Node> tmpNodes1=new ArrayList<Node>(); // se crea una lista para para guardar temporalmente los vecinos de los nodos a
-			tmpNodes1.addAll(A.neighbourNodes); // se agrega los nodos vecinos del nodo a
-			A.neighbourNodes.clear(); // y se elimina todos los nodos vecinos de a
-			List<Node> tmpNodes2=new ArrayList<Node>(); // se crea una lista para para guardar temporalmente los vecinos de los nodos b
-			tmpNodes2.addAll(B.neighbourNodes);// se agrega los nodos vecinos del nodo b
-			B.neighbourNodes.clear(); // y se elimina todos los nodos vecinos de b
+			List<Node> tmpNodes1=new ArrayList<Node>(); // a list is created to temporarily save the neighbors of the nodes a
+			tmpNodes1.addAll(A.neighbourNodes); // the node's neighboring nodes are added a
+			A.neighbourNodes.clear(); //and delete all the neighboring nodes of a
+			List<Node> tmpNodes2=new ArrayList<Node>(); // a list is created to temporarily save the neighbors of the nodes b
+			tmpNodes2.addAll(B.neighbourNodes);// the neighboring nodes of node b are added
+			B.neighbourNodes.clear(); // and remove all neighboring nodes from b
 			
-			B.neighbourNodes=tmpNodes1; // se actualiza la lista de vecinos del nodo b con los nodos vecinos que eran de a
-			A.neighbourNodes=tmpNodes2; // y se hace lo mismo para la lista de a
+			B.neighbourNodes=tmpNodes1; // update the neighbor list of node b with the neighboring nodes that were from a
+			A.neighbourNodes=tmpNodes2; //and the same is done for the list of to
 			
 		}
 		
 	}
-	/*Funcion para calcular el costo del grafo total
-  Output:int del costo total
+	/*Function to calculate the cost of the total graph
+   Output: int of total cost
   */
 	public int getEnergySupport() {
-		int sum=0; //variable para sumar el costo
-		for (Node A:this.nodesList) { //iterar por nodos sources
-			for (Node B: A.neighbourNodes) { //iterar por nodos destino
-				if(A.label<B.label) { //Si el nodo sorce es menor entonces se realiza la formula 
-					sum+=Math.abs(A.label-B.label); //fomula para sacar los valores individuales entre 2 nodos
+		int sum=0; //variable to add the cost
+		for (Node A:this.nodesList) { //iterate over sources nodes
+			for (Node B: A.neighbourNodes) { //iterate over destination nodes
+				if(A.label<B.label) { //If the source node is smaller then the formula is performed
+					sum+=Math.abs(A.label-B.label); //formula to output individual values between 2 nodes
 				}
 			}
 		}
-		return sum;// se regresa la suma
+		return sum;// the sum is returned
 	}
-/*Funcion para calcular el costo del nodo 
-	Input: *Nodo A el nodo que se quiere sacar el costo
-  			 *Mapa visited que son los nodos que ya fueron visitados
-  Output:int suma que es el costo total
+/*Function to calculate the cost of the node
+Input: * Node A the node that you want to get the cost
+   * Map visited which are the nodes that have already been visited
+   Output: int sum which is the total cost
   */
 
-	public double neighbours(int random) {//FunciÛn que consigue un vecino del grafo actual
+	public double neighbours(int random) {//Function that gets a neighbor of the current graph
 		
-		Node A=this.nodesList.get(random);//Se toma un nodo al azar
-		int mean=0;												//Y se busca conseguir el valor de la media en su lista de vecinos
+		Node A=this.nodesList.get(random);//A node is taken at random
+		int mean=0;	//And you are looking to get the value of the mean in your list of neighbors
 		
-		if(!A.neighbourNodes.isEmpty()) {//Se hace un sorting de su lista de vecinos, seg˙n su etiqueta
+		if(!A.neighbourNodes.isEmpty()) {//A sorting is done from your list of neighbors, according to their label
+
 			A.sorting();
 			
-			if (A.neighbourNodes.size()==1) {//Si la lista es de tamaÒo uno
-				mean=A.neighbourNodes.get(0).label;//La media es el unico valor disponible
+			if (A.neighbourNodes.size()==1) {//If the list is size one
+				mean=A.neighbourNodes.get(0).label;//The mean is the only available value
 			}
-			else if(A.neighbourNodes.size()%2==0) {//Si la lista es de tamaÒo par se consiguen los 2 nodos de la mitad y se saca un promedio
+			else if(A.neighbourNodes.size()%2==0) {//If the list is even in size, the 2 half nodes are obtained and an average is obtained
 				mean= ((A.neighbourNodes.get((A.neighbourNodes.size()/2)-1).label) + (A.neighbourNodes.get(A.neighbourNodes.size()/2).label)   )/2;
 			}
-			else {//Si la lista es de tamaÒo impar se consigue el dato del medio
+			else {//If the list is odd-sized, the middle data is obtained
 				mean=A.neighbourNodes.get(A.neighbourNodes.size()/2-1).label;
 			}
 
-			this.swapNodes(this.nodesList.get(random), this.nodesList.get(mean));//Se hace un swap entre el valor de la media y el primer nodo
+			this.swapNodes(this.nodesList.get(random), this.nodesList.get(mean));//A swap is made between the value of the mean and the first node
 			
-			this.lastSwapped1=random;//Se guardan ambos nodos que fueron cambiados
+			this.lastSwapped1=random;//Both nodes that were changed are saved
 			this.lastSwapped2=mean;
-		}else {//Si la lista estaba vacÌa
+		}else {//Si la lista estaba vac√≠a
 			lastSwapped1=-1;//No se hizo un swap, por lo tanto se guarda un valor imposible
 			lastSwapped2=-1;//Para saber que no hubo un swap
 		}
@@ -140,8 +139,8 @@ public class Graph {
 	}
 	
 	
-	public int simulatedAnnealing(){//FunciÛn principal del simulated annealing
-		Random ran=new Random();//Se declara un random para la funciÛn de aceptaciÛn
+	public int simulatedAnnealing(){//Funci√≥n principal del simulated annealing
+		Random ran=new Random();//Se declara un random para la funci√≥n de aceptaci√≥n
 		
 		double t0=100;//Se declara una temperatura inicial
 		double bestEnergy=this.getEnergySupport();//Se consigue la energia actual
@@ -155,8 +154,8 @@ public class Graph {
 				l--;//Se reduce en uno la variable de loops
 				
 				newEnergy=this.neighbours(ran.nextInt(this.numberOfNodes)); //Se consigue la energia de un vecino del grafo
-				if (this.acceptanceProbability(bestEnergy, newEnergy, t0)>ran.nextDouble()) {//Si la funciÛn de aceptacion es mayor que el random
-					bestEnergy=newEnergy;//La nueva energia se convierte en la mejor y el vecino se queda asÌ
+				if (this.acceptanceProbability(bestEnergy, newEnergy, t0)>ran.nextDouble()) {//Si la funci√≥n de aceptacion es mayor que el random
+					bestEnergy=newEnergy;//La nueva energia se convierte en la mejor y el vecino se queda as√≠
 				}else {//De otra manera
 					this.revertNeighbours();//Se revierte el swap
 				}
@@ -171,13 +170,13 @@ public class Graph {
 	}
 	
 
-	public double acceptanceProbability(double bestEnergy, double newEnergy, double temperature) {//La funciÛn de aceptaciÛn
+	public double acceptanceProbability(double bestEnergy, double newEnergy, double temperature) {//La funci√≥n de aceptaci√≥n
 
 		if (newEnergy<bestEnergy) {//Si la nueva energia es menor que la mejor energia actual
 			return 1;//Regresa un 1 y el cambio se aprueba
 		}
 		else if(newEnergy>bestEnergy){//Si la nueva energia es mayor
-			return Math.exp(-(newEnergy-bestEnergy)/temperature);//Se saca un exponencial del cambio de energia entre temperatura y se regresa para su evaluaciÛn
+			return Math.exp(-(newEnergy-bestEnergy)/temperature);//Se saca un exponencial del cambio de energia entre temperatura y se regresa para su evaluaci√≥n
 		}
 		else {//Si la nueva energia y la vieja son iguales
 			return .1;//Se regresa una probabilidad de .1
