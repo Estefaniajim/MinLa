@@ -18,22 +18,23 @@ public class Graph {
 				lastSwapped2;
 
 	/*Graph constructor
-   The values of the last swapped nodes are initialized at -1 (impossible positions)*/
+   	The values of the last swapped nodes are initialized at -1 (impossible positions)*/
 	public Graph() {
 		this.lastSwapped1=-1; 
 		this.lastSwapped2=-1;
 	}
- /*Function to create nodes*/
+	
+	 /*Function to create nodes*/
 	public void createNodes() {
 		for (int i=0;i<numberOfNodes;i++) { //For each number of nodes that the graph contains
 			Node aNode=new Node(i); //A node is created
 			nodesList.add(i, aNode);; //is added to the list of nodes
 		}
 	}
+	
 	/*Function to add connections between nodes
-   Input: * int number 1 which is the position (starting from 1 instead of 0) of the source node
-          * int number2 which is (starting from 1 instead of 0) of the destination node
-  */
+   	Input: * int number 1 which is the position (starting from 1 instead of 0) of the source node
+        * int number2 which is (starting from 1 instead of 0) of the destination node*/
 	public void addConnections(int number1, int number2) {
 		Node a=nodesList.get(number1-1); //source node is achieved
 		Node b=nodesList.get(number2-1); // the destination node is achieved
@@ -43,7 +44,7 @@ public class Graph {
 
 	}
   
-  /*Function to return the graph in string format*/
+  	/*Function to return the graph in string format*/
 	public String toString() {
 		StringBuilder builder=new StringBuilder();
 		for (Node a: nodesList) {
@@ -52,7 +53,7 @@ public class Graph {
 		}
 		return builder.toString();
 	}
-
+	
 	/*Function to change the position of 2 nodes between them 
 	Input: Nodes that you want to swap  */
 	public void swapNodes(Node A, Node B) {
@@ -76,13 +77,10 @@ public class Graph {
 			
 			B.neighbourNodes=tmpNodes1; // update the neighbor list of node b with the neighboring nodes that were from a
 			A.neighbourNodes=tmpNodes2; //and the same is done for the list of to
-			
 		}
-		
 	}
 	/*Function to calculate the cost of the total graph
-   Output: int of total cost
-  */
+   	Output: int of total cost*/
 	public int getEnergySupport() {
 		int sum=0; //variable to add the cost
 		for (Node A:this.nodesList) { //iterate over sources nodes
@@ -94,21 +92,17 @@ public class Graph {
 		}
 		return sum;// the sum is returned
 	}
-/*Function to calculate the cost of the node
-Input: * Node A the node that you want to get the cost
-   * Map visited which are the nodes that have already been visited
-   Output: int sum which is the total cost
-  */
-
+	/*Function to calculate the cost of the node
+	Input: * Node A the node that you want to get the cost
+   	* Map visited which are the nodes that have already been visited
+   	Output: int sum which is the total cost*/
 	public double neighbours(int random) {//Function that gets a neighbor of the current graph
 		
 		Node A=this.nodesList.get(random);//A node is taken at random
 		int mean=0;	//And you are looking to get the value of the mean in your list of neighbors
 		
 		if(!A.neighbourNodes.isEmpty()) {//A sorting is done from your list of neighbors, according to their label
-
 			A.sorting();
-			
 			if (A.neighbourNodes.size()==1) {//If the list is size one
 				mean=A.neighbourNodes.get(0).label;//The mean is the only available value
 			}
@@ -118,7 +112,6 @@ Input: * Node A the node that you want to get the cost
 			else {//If the list is odd-sized, the middle data is obtained
 				mean=A.neighbourNodes.get(A.neighbourNodes.size()/2-1).label;
 			}
-
 			this.swapNodes(this.nodesList.get(random), this.nodesList.get(mean));//A swap is made between the value of the mean and the first node
 			
 			this.lastSwapped1=random;//Both nodes that were changed are saved
@@ -127,7 +120,6 @@ Input: * Node A the node that you want to get the cost
 			lastSwapped1=-1;//No se hizo un swap, por lo tanto se guarda un valor imposible
 			lastSwapped2=-1;//Para saber que no hubo un swap
 		}
-		
 		return this.getEnergySupport();//Regresa la energia del grafo vecino
 	}
 	
@@ -135,9 +127,7 @@ Input: * Node A the node that you want to get the cost
 		if (lastSwapped1!=-1 && lastSwapped2!=-1) {//Si hubo un swap anterior
 			this.swapNodes(this.nodesList.get(this.lastSwapped1), this.nodesList.get(this.lastSwapped2));//Se manda a llamar a la funcion de swap
 		}
-		
 	}
-	
 	
 	public int simulatedAnnealing(){//Función principal del simulated annealing
 		Random ran=new Random();//Se declara un random para la función de aceptación
@@ -162,14 +152,10 @@ Input: * Node A the node that you want to get the cost
 			}
 
 			t0=t0*alpha;//Se reduce la temperatura usando el aplha
-			
 		}
-
-		
 		return (int) bestEnergy;//Se regresa la energia final
 	}
 	
-
 	public double acceptanceProbability(double bestEnergy, double newEnergy, double temperature) {//La función de aceptación
 
 		if (newEnergy<bestEnergy) {//Si la nueva energia es menor que la mejor energia actual
@@ -183,15 +169,11 @@ Input: * Node A the node that you want to get the cost
 		}
 	}
 
-
-
-
-
 	public static void main(String[] args) {
 
 		Graph g=new Graph();
 
-		if(args.length == 0) {									//Lector de archivos por cmd
+		if(args.length == 0) {									
         System.out.println("File name not specified.");
         System.exit(1);
 		}
@@ -223,14 +205,5 @@ Input: * Node A the node that you want to get the cost
 		System.out.println(g);
 		System.out.println(newEnergy);
 		System.out.println(oldEnergy);
-
-
-
-
 	}
-
 }
-
-
-
-
